@@ -1,6 +1,6 @@
 <div align="center">
 
-# php2shell — Exploitable Lab
+# php2shell: Exploitable Lab
 
 **CVE-2026-109618 · CVE-2026-109619 · PHP 5.4 – 8.5.11**
 
@@ -54,7 +54,7 @@ A two-container lab that reproduces php2shell end to end: one vulnerable PHP 8.4
 | **Advisories** | [GHSA-w8hw-w9fx-j79w](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w) · [GHSA-6wmf-4rv5-p3rp](https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp) |
 | **Upstream fix** | [php-src commit 3584a98](https://github.com/php/php-src/commit/3584a98bda0f2c0d367255b046798b0d3a221a19) |
 | **Exploitation** | In CISA KEV since 2026-10-26 |
-| **Pre-auth** | Yes — fires during `php_request_startup()` |
+| **Pre-auth** | Yes, fires during `php_request_startup()` |
 
 Two bugs in PHP's own request startup, chained:
 
@@ -84,7 +84,7 @@ database, no third-party code. **The exploit never executes that file.** It runs
 and finishes inside `php_request_startup()`, before PHP compiles the script.
 
 That is the point of the lab: your framework's authentication, your application
-WAF rules, your input validation — all downstream of this. There is no
+WAF rules, your input validation. All downstream of this. There is no
 application-layer mitigation.
 
 ---
@@ -169,7 +169,7 @@ root:x:0:0:root:/root:/bin/bash
 ```console
 $ ./poc/rce.py --container php2shell-patched --port 18081 --shell
 ============================================================
-NO SHELL — the payload did not start on this target.
+NO SHELL: the payload did not start on this target.
 On the patched image this is the expected result.
 ============================================================
 ```
@@ -180,7 +180,7 @@ On the patched image this is the expected result.
 
 Three stages. Each maps to a different detection opportunity.
 
-### Stage 1 — leak the heap
+### Stage 1: leak the heap
 
 Request A primes the worker: a body over `max_input_vars` makes PHP emit a
 warning, which with `display_errors=On` sends headers early. A one-byte
@@ -196,7 +196,7 @@ declared length is far larger than the block. PHP URL-encodes the string into
 [+] chunk base = 0x7615a0a00000
 ```
 
-### Stage 2 — leak the code base
+### Stage 2: leak the code base
 
 Same primitive, aimed differently: the overread window is shaped to carry a
 function pointer out of a live 56-byte HashTable. Subtract the known
@@ -208,7 +208,7 @@ function pointer out of a live 56-byte HashTable. Subtract the known
 
 Both leaks are ASLR defeats costing a few HTTP requests and no crash.
 
-### Stage 3 — turn the cleanup into a call
+### Stage 3: turn the cleanup into a call
 
 A session reference that survived an aborted request is reclaimed with attacker
 bytes describing a fake `HashTable` whose destructor is `zif_system`, plus a
@@ -284,8 +284,8 @@ Five files decide everything, and the application is not one of them:
 
 The size mismatch is the interesting part. A multipart part can carry unlimited
 headers, and PHP stores each as name/value strings, so the in-memory cost is far
-above the wire cost. In this lab, 400,000 copies of a three-byte header line —
-**1.2 MB on the wire** — exhausts an 8 MB parser budget:
+above the wire cost. In this lab, 400,000 copies of a three-byte header line,
+**1.2 MB on the wire**, exhausts an 8 MB parser budget:
 
 ```console
 $ python3 poc/probe.py --target http://127.0.0.1:18080/
@@ -367,7 +367,7 @@ php2shell/
 ## Troubleshooting
 
 **`NO PROOF` / `NO SHELL` on the vulnerable image.** Usually heap layout. Run it
-again — stage 3 is probabilistic. If it never lands, rebuild from a clean state:
+again. Stage 3 is probabilistic. If it never lands, rebuild from a clean state:
 
 ```bash
 docker compose --profile patched down --rmi local --volumes
@@ -390,18 +390,18 @@ then pass `--port` to the driver.
 
 ## Further reading
 
-- [The full technical write-up](https://squidhacker.com) — root cause, the patch,
+- [The full technical write-up](https://squidhacker.com): root cause, the patch,
   the SAPI matrix, and detection guidance
-- [GHSA-w8hw-w9fx-j79w](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w) — CVE-2026-109618
-- [GHSA-6wmf-4rv5-p3rp](https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp) — CVE-2026-109619
-- [php-src commit 3584a98](https://github.com/php/php-src/commit/3584a98bda0f2c0d367255b046798b0d3a221a19) — "Avoid state corruption via bailout"
-- [9bie/php2shell-bypass-aslr-exp](https://github.com/9bie/php2shell-bypass-aslr-exp) — public research implementation the driver fetches at a pinned commit
+- [GHSA-w8hw-w9fx-j79w](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w): CVE-2026-109618
+- [GHSA-6wmf-4rv5-p3rp](https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp): CVE-2026-109619
+- [php-src commit 3584a98](https://github.com/php/php-src/commit/3584a98bda0f2c0d367255b046798b0d3a221a19): "Avoid state corruption via bailout"
+- [9bie/php2shell-bypass-aslr-exp](https://github.com/9bie/php2shell-bypass-aslr-exp): public research implementation the driver fetches at a pinned commit
 
 ---
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
 
 The exploit chain itself is not included or redistributed. `poc/rce.py` fetches
 [9bie/php2shell-bypass-aslr-exp](https://github.com/9bie/php2shell-bypass-aslr-exp)

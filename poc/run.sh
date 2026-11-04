@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# php2shell lab — one-command demonstration.
+# php2shell lab: one-command demonstration.
 #
 #   ./run.sh                                  # vulnerable: probe + proof of id
 #   ./run.sh --cmd "uname -a"                 # run any command through the chain

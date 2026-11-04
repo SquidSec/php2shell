@@ -3,8 +3,8 @@ FROM php:8.4.27-apache
 # ---------------------------------------------------------------------------
 # Patched negative control for the php2shell lab.
 #
-# 8.4.27 is the first fixed 8.4 release. Everything else — application, ini,
-# single-worker pool — is identical to the vulnerable image, so a difference
+# 8.4.27 is the first fixed 8.4 release. Everything else (application, ini,
+# single-worker pool) is identical to the vulnerable image, so a difference
 # in outcome is attributable to the engine patch alone.
 # ---------------------------------------------------------------------------
 

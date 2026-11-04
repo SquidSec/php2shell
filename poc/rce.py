@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""php2shell lab — RCE chain driver: arbitrary commands and an interactive shell.
+"""php2shell lab: RCE chain driver for arbitrary commands and an interactive shell.
 
 This script does NOT contain an exploit. It fetches the public research
 implementation at a pinned commit, reads the two libphp symbol offsets out of
@@ -215,7 +215,7 @@ def run_command(container: str, upstream: Path, target: str, zif: int, dtor: int
         print("=" * 60)
         return 0
     print("=" * 60)
-    print("NO OUTPUT — the chain did not execute on this target.")
+    print("NO OUTPUT: the chain did not execute on this target.")
     print("On the patched image this is the expected result.")
     print("=" * 60)
     return 1
@@ -279,7 +279,7 @@ def shell(container: str, upstream: Path, target: str, zif: int, dtor: int,
             break
     else:
         print("=" * 60)
-        print("NO SHELL — the payload did not start on this target.")
+        print("NO SHELL: the payload did not start on this target.")
         print("On the patched image this is the expected result.")
         print("=" * 60)
         return 1

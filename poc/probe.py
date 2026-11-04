@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""php2shell lab — trigger probe (no exploit, no code execution).
+"""php2shell lab: trigger probe (no exploit, no code execution).
 
 Demonstrates the two properties the article claims, against a target you own:
 

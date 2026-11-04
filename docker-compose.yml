@@ -1,4 +1,4 @@
-# php2shell lab — deliberately vulnerable, isolated by design.
+# php2shell lab: deliberately vulnerable, isolated by design.
 #
 #   docker compose up -d --build          # start the vulnerable target
 #   ./poc/php2shell-poc.sh                # exploit it, expect uid=33(www-data)
