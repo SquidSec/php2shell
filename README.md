@@ -9,7 +9,7 @@ A two-container lab that reproduces php2shell end to end: one vulnerable PHP 8.4
 [![PHP](https://img.shields.io/badge/PHP-8.4.26%20%2F%208.4.27-777BB4?logo=php&logoColor=white)](#the-two-images)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](#quick-start)
 [![CVE](https://img.shields.io/badge/CVE-2026--109618%20%7C%20CVE--2026--109619-critical-red)](#vulnerability-summary)
-[![Docs](https://img.shields.io/badge/write--up-squidhacker.com-8A2BE2)](https://squidhacker.com)
+[![Write-up](https://img.shields.io/badge/write--up-php2shell-8A2BE2)](https://squidhacker.com/2026/11/php2shell-deep-technical-breakdown-docker-lab/)
 
 </div>
 
@@ -390,7 +390,7 @@ then pass `--port` to the driver.
 
 ## Further reading
 
-- [The full technical write-up](https://squidhacker.com): root cause, the patch,
+- [The full technical write-up](https://squidhacker.com/2026/11/php2shell-deep-technical-breakdown-docker-lab/): root cause, the patch,
   the SAPI matrix, and detection guidance
 - [GHSA-w8hw-w9fx-j79w](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w): CVE-2026-109618
 - [GHSA-6wmf-4rv5-p3rp](https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp): CVE-2026-109619
