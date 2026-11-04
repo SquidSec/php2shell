@@ -1,0 +1,18 @@
+FROM php:8.4.27-apache
+
+# ---------------------------------------------------------------------------
+# Patched negative control for the php2shell lab.
+#
+# 8.4.27 is the first fixed 8.4 release. Everything else — application, ini,
+# single-worker pool — is identical to the vulnerable image, so a difference
+# in outcome is attributable to the engine patch alone.
+# ---------------------------------------------------------------------------
+
+COPY php.ini /usr/local/etc/php/conf.d/zz-php2shell-lab.ini
+COPY apache/prefork-single.conf /etc/apache2/conf-enabled/zz-php2shell-lab.conf
+COPY app/ /var/www/html/
+
+RUN mkdir -p /out && chown www-data:www-data /out && chmod 0775 /out
+RUN echo "ServerName php2shell-lab-patched" > /etc/apache2/conf-enabled/zz-servername.conf
+
+EXPOSE 80

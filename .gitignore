@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+.php2shell-upstream/
+/php2shell-upstream/

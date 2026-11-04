@@ -1,0 +1,38 @@
+# php2shell lab — deliberately vulnerable, isolated by design.
+#
+#   docker compose up -d --build          # start the vulnerable target
+#   ./poc/php2shell-poc.sh                # exploit it, expect uid=33(www-data)
+#
+#   docker compose --profile patched up -d --build patched
+#   TARGET=http://127.0.0.1:8081/ PORT=8081 ./poc/php2shell-poc.sh   # expect failure
+#
+# Do not publish this compose file on a host with a public interface. The
+# ports are bound to 127.0.0.1 for that reason.
+
+services:
+  vulnerable:
+    build:
+      context: .
+    image: squidhacker/php2shell-lab:8.4.26
+    container_name: php2shell-vulnerable
+    # Fixed hostname. The chain's heap geometry depends on the length of the
+    # container hostname, because Apache writes it into the environment it
+    # hands to PHP. A random name silently changes the layout and the chain
+    # stops leaking. Do not remove this line.
+    hostname: php2shell-vulnerable
+    ports:
+      - "127.0.0.1:18080:80"
+    restart: "no"
+
+  # Patched negative control. Same app, same ini, same single worker.
+  patched:
+    profiles: ["patched"]
+    build:
+      context: .
+      dockerfile: Dockerfile.patched
+    image: squidhacker/php2shell-lab:8.4.27
+    container_name: php2shell-patched
+    hostname: php2shell-patched
+    ports:
+      - "127.0.0.1:18081:80"
+    restart: "no"

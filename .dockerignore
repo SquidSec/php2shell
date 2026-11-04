@@ -1,0 +1,7 @@
+.git
+.gitignore
+.github
+__pycache__
+*.pyc
+README.md
+LICENSE
